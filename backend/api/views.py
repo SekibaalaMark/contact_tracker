@@ -88,3 +88,10 @@ class ListVillagesView(APIView):
 
 
 
+
+class ListChildrenView(APIView):
+    def get(self, request):
+        children = Child.objects.all()
+        serializer = ChildSerializer(children, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
