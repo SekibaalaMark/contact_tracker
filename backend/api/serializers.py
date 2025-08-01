@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
-from .models import CustomUser
+from .models import *
 
 
 
@@ -48,3 +48,21 @@ class UserLoginSerializer(serializers.Serializer):
                 raise serializers.ValidationError("Invalid username or password.")
         else:
             raise serializers.ValidationError("Both username and password are required.")
+
+
+
+# children/serializers.py
+from rest_framework import serializers
+from .models import Child
+
+class ChildSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Child
+        fields = '__all__'
+
+    def validate_number(self, value):
+        if not value.isdigit():
+            raise serializers.ValidationError("Child number must contain only digits (e.g., '001234').")
+        if len(value) != 4:
+            raise serializers.ValidationError("Child number must be exactly 6 digits long.")
+        return value
