@@ -79,3 +79,17 @@ class VillageSerializer(serializers.ModelSerializer):
         if not value.strip():
             raise serializers.ValidationError("Village name cannot be empty.")
         return value.strip().title()
+
+
+
+class ChildContactUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Child
+        fields = ['contact']
+
+    def validate_contact(self, value):
+        if not value.isdigit():
+            raise serializers.ValidationError("Contact must contain only digits.")
+        if len(value) != 10:
+            raise serializers.ValidationError("Contact must be exactly 10 digits.")
+        return value
