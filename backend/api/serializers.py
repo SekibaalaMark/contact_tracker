@@ -66,3 +66,16 @@ class ChildSerializer(serializers.ModelSerializer):
         if len(value) != 4:
             raise serializers.ValidationError("Child number must be exactly 6 digits long.")
         return value
+
+
+
+
+class VillageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Village
+        fields = '__all__'
+
+    def validate_name(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("Village name cannot be empty.")
+        return value.strip().title()
