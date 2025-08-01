@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-75ihu_&r_saov)3(u$+yojry=-qgft@&%kxchs1@+d1@!l-^bo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['contact-tracker-zy9f.onrender.com']
+ALLOWED_HOSTS = ["*"]
 
 # settings.py
 AUTH_USER_MODEL = 'api.CustomUser'
