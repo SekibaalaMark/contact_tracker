@@ -25,3 +25,26 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+
+
+from django.contrib.auth import authenticate
+class UserLoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        username = attrs.get("username")
+        password = attrs.get("password")
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if user:
+                if not user.is_active:
+                    raise serializers.ValidationError("User account is disabled.")
+                attrs["user"] = user
+                return attrs
+            else:
+                raise serializers.ValidationError("Invalid username or password.")
+        else:
+            raise serializers.ValidationError("Both username and password are required.")
