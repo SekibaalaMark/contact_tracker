@@ -95,3 +95,17 @@ class ListChildrenView(APIView):
         serializer = ChildSerializer(children, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+
+class UpdateChildContactView(APIView):
+    def patch(self, request, id):
+        try:
+            child = Child.objects.get(id=id)
+        except Child.DoesNotExist:
+            return Response({'error': 'Child not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = ChildContactUpdateSerializer(child, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Contact updated successfully', 'data': serializer.data})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
