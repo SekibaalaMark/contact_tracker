@@ -7,12 +7,12 @@ from django.db import models
 
 class CustomUser(AbstractUser):
     username = models.CharField(max_length=25, unique=True)
-    
+
 
 
 
 class Child(models.Model):
-    number = models.CharField(unique=True,max_length=6)
+    number = models.CharField(unique=True,max_length=4)
     first_name = models.CharField(max_length=15)
     last_name = models.CharField(max_length=15)
     village = models.CharField(max_length=40)
