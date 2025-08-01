@@ -12,4 +12,5 @@ urlpatterns = [
     path('login/', UserLoginView.as_view(), name='user-login'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # login
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # refresh
+    path('add-child/', AddChildView.as_view(), name='add-child'),
 ]
