@@ -75,3 +75,16 @@ class AddVillageView(APIView):
                 "village": serializer.data
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class ListVillagesView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        villages = Village.objects.all()
+        serializer = VillageSerializer(villages, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+

@@ -14,4 +14,5 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # refresh
     path('add-child/', AddChildView.as_view(), name='add-child'),
     path('add-village/', AddVillageView.as_view(), name='add-village'),
+    path('list-village/', ListVillagesView.as_view(), name='list-villages'),
 ]
