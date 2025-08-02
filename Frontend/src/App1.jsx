@@ -10,6 +10,8 @@ import { AuthProvider, useAuth } from "@/context/authContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 import ForgotPassword from "./features/authentication/ForgotPassword.jsx";
 import Logout from "./components/Logout";
 
@@ -45,9 +47,10 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/dashboard" element={<div>Dashboard Coming Soon</div>} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Container>
   );
