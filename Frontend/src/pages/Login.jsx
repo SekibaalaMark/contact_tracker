@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Login.css';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
+  useEffect(() => {
+    // Check for success message from registration
+    if (location.state?.message) {
+      setSuccessMessage(location.state.message);
+      // Clear the message from location state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,10 +80,20 @@ const Login = () => {
       if (response.ok) {
         // Login successful
         console.log('Login successful:', data);
-        // TODO: Store user data/token in localStorage or context
-        // TODO: Redirect to dashboard
-        // Example: localStorage.setItem('token', data.token);
-        // Example: navigate('/dashboard');
+        
+        // Store authentication data
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('userData', JSON.stringify({
+          username: formData.username,
+          // Add any other user data from the response
+        }));
+        
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
+        
+        // Redirect to dashboard
+        navigate('/dashboard');
       } else {
         // Login failed
         console.error('Login failed:', data);
@@ -95,6 +117,11 @@ const Login = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
+          {successMessage && (
+            <div className="success-message">
+              {successMessage}
+            </div>
+          )}
           {errors.general && (
             <div className="error-message general-error">
               {errors.general}
