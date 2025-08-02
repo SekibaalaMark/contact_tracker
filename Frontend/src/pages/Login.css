@@ -107,6 +107,16 @@
   text-align: center;
 }
 
+.success-message {
+  background: #f0fff4;
+  border: 1px solid #9ae6b4;
+  color: #22543d;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
 .form-options {
   display: flex;
   justify-content: space-between;
