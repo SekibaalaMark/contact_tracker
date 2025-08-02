@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import AddContactModal from './AddContactModal';
+import ContactsTable from '../components/ContactsTable';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showContacts, setShowContacts] = useState(false);
 
   useEffect(() => {
     // Check if user is authenticated
@@ -114,7 +116,10 @@ const Dashboard = () => {
                 <span className="action-icon">🔍</span>
                 <span>Search Contacts</span>
               </button>
-              <button className="action-btn secondary">
+              <button
+                className="action-btn secondary"
+                onClick={() => setShowContacts(true)}
+              >
                 <span className="action-icon">📋</span>
                 <span>View All Contacts</span>
               </button>
@@ -132,6 +137,23 @@ const Dashboard = () => {
               <p className="empty-state">No contacts yet. Start by adding your first contact!</p>
             </div>
           </div>
+
+          {/* Contacts Table Modal */}
+          {showContacts && (
+            <div className="modal-backdrop" style={{ zIndex: 1000, position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", background: "rgba(0,0,0,0.3)" }}>
+              <div className="modal-content" style={{ maxWidth: 900, margin: "40px auto", background: "#fff", borderRadius: 8, padding: 24, position: "relative" }}>
+                <button
+                  className="close-btn"
+                  style={{ position: "absolute", top: 12, right: 16, fontSize: 24, background: "none", border: "none", cursor: "pointer" }}
+                  onClick={() => setShowContacts(false)}
+                  aria-label="Close"
+                >
+                  ×
+                </button>
+                <ContactsTable />
+              </div>
+            </div>
+          )}
         </div>
       </main>
 
@@ -146,4 +168,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard; 
+export default Dashboard;
