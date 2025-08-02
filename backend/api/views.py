@@ -51,7 +51,7 @@ class UserLoginView(APIView):
 
 
 class AddChildView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = ChildSerializer(data=request.data)
         if serializer.is_valid():
@@ -66,6 +66,7 @@ class AddChildView(APIView):
 
 
 class AddVillageView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = VillageSerializer(data=request.data)
         if serializer.is_valid():
@@ -80,7 +81,7 @@ class AddVillageView(APIView):
 
 
 class ListVillagesView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     def get(self, request):
         villages = Village.objects.all()
         serializer = VillageSerializer(villages, many=True)
@@ -90,6 +91,7 @@ class ListVillagesView(APIView):
 
 
 class ListChildrenView(APIView):
+    permission_classes = [AllowAny]
     def get(self, request):
         children = Child.objects.all()
         serializer = ChildSerializer(children, many=True)
@@ -98,6 +100,7 @@ class ListChildrenView(APIView):
 
 
 class UpdateChildContactView(APIView):
+    permission_classes = [AllowAny]
     def patch(self, request, id):
         try:
             child = Child.objects.get(id=id)
