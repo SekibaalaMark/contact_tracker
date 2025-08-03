@@ -10,9 +10,14 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showContacts, setShowContacts] = useState(false);
+  const [totalContacts, setTotalContacts] = useState(0);
 
   useEffect(() => {
     // Check if user is authenticated
+    fetch('https://contact-tracker-zy9f.onrender.com/api/children/total/')
+      .then(res => res.json())
+      .then(data => setTotalContacts(data.total_children || 0))
+      .catch(() => setTotalContacts(0));
     const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
     const userData = localStorage.getItem("userData");
     
@@ -84,7 +89,7 @@ const Dashboard = () => {
                 <div className="stat-icon">📞</div>
                 <div className="stat-info">
                   <h3>Total Contacts</h3>
-                  <p className="stat-number">0</p>
+                  <p className="stat-number">{totalContacts}</p>
                 </div>
               </div>
               <div className="stat-card">
