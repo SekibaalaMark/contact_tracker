@@ -112,3 +112,11 @@ class UpdateChildContactView(APIView):
             serializer.save()
             return Response({'message': 'Contact updated successfully', 'data': serializer.data})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class TotalChildrenView(APIView):
+    def get(self, request):
+        total = Child.objects.count()
+        return Response({'total_children': total}, status=status.HTTP_200_OK)
