@@ -124,10 +124,6 @@ const Dashboard = () => {
                 <span className="action-icon">📋</span>
                 <span>View All Contacts</span>
               </button>
-              <button className="action-btn secondary">
-                <span className="action-icon">⚙️</span>
-                <span>Settings</span>
-              </button>
             </div>
           </div>
 
