@@ -118,8 +118,8 @@ const Dashboard = () => {
                 <span>Add New Contact</span>
               </button>
               <button className="action-btn secondary">
-                <span className="action-icon">🔍</span>
-                <span>Search Contacts</span>
+                <span className="action-icon">✏️</span>
+                <span>Edit Contacts</span>
               </button>
               <button
                 className="action-btn secondary"
