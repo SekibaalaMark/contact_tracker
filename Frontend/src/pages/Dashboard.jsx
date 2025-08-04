@@ -117,10 +117,6 @@ const Dashboard = () => {
                 <span className="action-icon">➕</span>
                 <span>Add New Contact</span>
               </button>
-              <button className="action-btn secondary">
-                <span className="action-icon">✏️</span>
-                <span>Edit Contacts</span>
-              </button>
               <button
                 className="action-btn secondary"
                 onClick={() => setShowContacts(true)}
