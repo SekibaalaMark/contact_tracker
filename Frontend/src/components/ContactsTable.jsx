@@ -4,10 +4,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 const fetchContacts = async () => {
-  const token = localStorage.getItem("token");
-  const res = await fetch("https://contact-tracker-zy9f.onrender.com/api/list-children/", {
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-  });
+  const res = await fetch("https://contact-tracker-zy9f.onrender.com/api/list-children/");
   if (!res.ok) throw new Error("Failed to fetch contacts");
   return await res.json();
 };
@@ -29,6 +26,9 @@ const ContactsTable = () => {
   const [contacts, setContacts] = useState([]);
   const [filters, setFilters] = useState({ number: "", village: "", name: "" });
   const [filtered, setFiltered] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [editContact, setEditContact] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     fetchContacts()
@@ -42,6 +42,40 @@ const ContactsTable = () => {
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
+  };
+
+  const startEdit = (id, currentContact) => {
+    setEditingId(id);
+    setEditContact(currentContact);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditContact("");
+  };
+
+  const saveEdit = async (id) => {
+    setIsSaving(true);
+    try {
+      const res = await fetch(`https://contact-tracker-zy9f.onrender.com/api/children/${id}/update-contact/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ contact: editContact }),
+      });
+      if (!res.ok) throw new Error("Failed to update contact");
+      setContacts((prev) =>
+        prev.map((c) =>
+          c.id === id ? { ...c, contact: editContact } : c
+        )
+      );
+      setEditingId(null);
+      setEditContact("");
+    } catch (err) {
+      alert("Failed to update contact.");
+    }
+    setIsSaving(false);
   };
 
   const exportExcel = () => {
@@ -99,12 +133,13 @@ const ContactsTable = () => {
             <th>Last Name</th>
             <th>Village</th>
             <th>Contact</th>
+            <th>Edit</th>
           </tr>
         </thead>
         <tbody>
           {filtered.length === 0 ? (
             <tr>
-              <td colSpan={5} style={{ textAlign: "center" }}>No contacts found.</td>
+              <td colSpan={6} style={{ textAlign: "center" }}>No contacts found.</td>
             </tr>
           ) : (
             filtered.map((c) => (
@@ -113,7 +148,27 @@ const ContactsTable = () => {
                 <td>{c.first_name}</td>
                 <td>{c.last_name}</td>
                 <td>{c.village}</td>
-                <td>{c.contact}</td>
+                <td>
+                  {editingId === c.id ? (
+                    <input
+                      value={editContact}
+                      onChange={e => setEditContact(e.target.value)}
+                      disabled={isSaving}
+                    />
+                  ) : (
+                    c.contact
+                  )}
+                </td>
+                <td>
+                  {editingId === c.id ? (
+                    <>
+                      <button onClick={() => saveEdit(c.id)} disabled={isSaving}>Save</button>
+                      <button onClick={cancelEdit} disabled={isSaving}>Cancel</button>
+                    </>
+                  ) : (
+                    <button onClick={() => startEdit(c.id, c.contact)}>Edit</button>
+                  )}
+                </td>
               </tr>
             ))
           )}
