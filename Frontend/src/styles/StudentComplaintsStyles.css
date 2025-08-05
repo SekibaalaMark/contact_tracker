@@ -95,7 +95,7 @@ button:hover {
 /* Responsive design for smaller screens */
 @media (max-width: 768px) {
   .complaint-container {
-    width: 90%; /* Adjust width for tablets and smaller screens */
+    width: 97%; /* Adjust width for tablets and smaller screens */
     padding: 1rem;
   }
 
