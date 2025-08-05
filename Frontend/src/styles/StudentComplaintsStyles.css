@@ -1,9 +1,9 @@
 /* Container for the complaint form */
 .complaint-container {
-  width: 50%;
+  width: 30%;
   margin: auto;
   padding: 1rem;
-  border-radius: 10px;
+  border-radius: 11px;
   background: #fff;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   font-family: "Poppins", sans-serif;
@@ -39,7 +39,7 @@ textarea {
   border-radius: 5px;
   transition: border-color 0.3s ease;
   font-size: 1rem;
-  width: 100%;
+  width: 200%;
   box-sizing: border-box;
 }
 
