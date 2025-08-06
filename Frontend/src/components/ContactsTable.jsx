@@ -30,6 +30,11 @@ const ContactsTable = () => {
   const [editContact, setEditContact] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
+  // State for editing parent name
+  const [editingParentId, setEditingParentId] = useState(null);
+  const [editParentName, setEditParentName] = useState("");
+  const [isSavingParent, setIsSavingParent] = useState(false);
+
   useEffect(() => {
     fetchContacts()
       .then(setContacts)
@@ -44,6 +49,7 @@ const ContactsTable = () => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
+  // Edit contact handlers
   const startEdit = (id, currentContact) => {
     setEditingId(id);
     setEditContact(currentContact);
@@ -76,6 +82,41 @@ const ContactsTable = () => {
       alert("Failed to update contact.");
     }
     setIsSaving(false);
+  };
+
+  // Edit parent name handlers
+  const startEditParent = (id, currentParentName) => {
+    setEditingParentId(id);
+    setEditParentName(currentParentName || "");
+  };
+
+  const cancelEditParent = () => {
+    setEditingParentId(null);
+    setEditParentName("");
+  };
+
+  const saveEditParent = async (id) => {
+    setIsSavingParent(true);
+    try {
+      const res = await fetch(`https://contact-tracker-zy9f.onrender.com/api/child/${id}/update-parent-name/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ parent_name: editParentName }),
+      });
+      if (!res.ok) throw new Error("Failed to update parent name");
+      setContacts((prev) =>
+        prev.map((c) =>
+          c.id === id ? { ...c, parent_name: editParentName } : c
+        )
+      );
+      setEditingParentId(null);
+      setEditParentName("");
+    } catch (err) {
+      alert("Failed to update parent name.");
+    }
+    setIsSavingParent(false);
   };
 
   const exportExcel = () => {
@@ -144,13 +185,14 @@ const ContactsTable = () => {
             <th>Village</th>
             <th>Contact</th>
             <th>Parent Name</th>
-            <th>Edit</th>
+            <th>Edit Contact</th>
+            <th>Edit Parent Name</th>
           </tr>
         </thead>
         <tbody>
           {filtered.length === 0 ? (
             <tr>
-              <td colSpan={7} style={{ textAlign: "center" }}>No contacts found.</td>
+              <td colSpan={8} style={{ textAlign: "center" }}>No contacts found.</td>
             </tr>
           ) : (
             filtered.map((c) => (
@@ -170,7 +212,17 @@ const ContactsTable = () => {
                     c.contact
                   )}
                 </td>
-                <td>{c.parent_name || ""}</td>
+                <td>
+                  {editingParentId === c.id ? (
+                    <input
+                      value={editParentName}
+                      onChange={e => setEditParentName(e.target.value)}
+                      disabled={isSavingParent}
+                    />
+                  ) : (
+                    c.parent_name || ""
+                  )}
+                </td>
                 <td>
                   {editingId === c.id ? (
                     <>
@@ -179,6 +231,16 @@ const ContactsTable = () => {
                     </>
                   ) : (
                     <button onClick={() => startEdit(c.id, c.contact)}>Edit</button>
+                  )}
+                </td>
+                <td>
+                  {editingParentId === c.id ? (
+                    <>
+                      <button onClick={() => saveEditParent(c.id)} disabled={isSavingParent}>Save</button>
+                      <button onClick={cancelEditParent} disabled={isSavingParent}>Cancel</button>
+                    </>
+                  ) : (
+                    <button onClick={() => startEditParent(c.id, c.parent_name)}>Edit</button>
                   )}
                 </td>
               </tr>
