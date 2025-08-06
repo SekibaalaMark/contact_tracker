@@ -17,6 +17,7 @@ class Child(models.Model):
     last_name = models.CharField(max_length=15)
     village = models.CharField(max_length=40)
     contact = models.CharField(max_length=10)
+    parent_name = models.CharField(max_length=50,null=True, blank=True)
     def __str__(self):
         return self.number
 
