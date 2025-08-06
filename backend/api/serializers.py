@@ -59,6 +59,9 @@ class ChildSerializer(serializers.ModelSerializer):
     class Meta:
         model = Child
         fields = '__all__'
+        extra_kwargs = {
+            'parent_name': {'required': True}
+        }
 
     def validate_number(self, value):
         if not value.isdigit():
