@@ -96,3 +96,11 @@ class ChildContactUpdateSerializer(serializers.ModelSerializer):
         if len(value) != 10:
             raise serializers.ValidationError("Contact must be exactly 10 digits.")
         return value
+
+
+
+
+class ChildParentNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Child
+        fields = ['parent_name']
