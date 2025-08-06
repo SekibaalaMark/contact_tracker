@@ -120,3 +120,15 @@ class TotalChildrenView(APIView):
     def get(self, request):
         total = Child.objects.count()
         return Response({'total_children': total}, status=status.HTTP_200_OK)
+
+
+from rest_framework.generics import UpdateAPIView
+from .models import Child
+from .serializers import ChildParentNameSerializer
+
+class UpdateChildParentNameView(UpdateAPIView):
+    permission_classes = [AllowAny]
+    queryset = Child.objects.all()
+    serializer_class = ChildParentNameSerializer
+    lookup_field = 'id'  # or 'number' if you prefer
+    permission_classes = [AllowAny]
