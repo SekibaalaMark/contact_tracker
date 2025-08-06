@@ -18,4 +18,5 @@ urlpatterns = [
     path('list-children/', ListChildrenView.as_view(), name='list-children'),
     path('children/<int:id>/update-contact/', UpdateChildContactView.as_view(), name='update-child-contact'),
     path('children/total/', TotalChildrenView.as_view(), name='total-children'),
+    path('child/<int:id>/update-parent-name/', UpdateChildParentNameView.as_view(), name='update-child-parent'),
 ]
