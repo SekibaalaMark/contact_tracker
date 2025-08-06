@@ -79,7 +79,16 @@ const ContactsTable = () => {
   };
 
   const exportExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(filtered);
+    // Include parent_name in export
+    const dataToExport = filtered.map(c => ({
+      number: c.number,
+      first_name: c.first_name,
+      last_name: c.last_name,
+      village: c.village,
+      contact: c.contact,
+      parent_name: c.parent_name || "",
+    }));
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Contacts");
     XLSX.writeFile(wb, "contacts.xlsx");
@@ -88,13 +97,14 @@ const ContactsTable = () => {
   const exportPDF = () => {
     const doc = new jsPDF();
     doc.autoTable({
-      head: [["Number", "First Name", "Last Name", "Village", "Contact"]],
+      head: [["Number", "First Name", "Last Name", "Village", "Contact", "Parent Name"]],
       body: filtered.map((c) => [
         c.number,
         c.first_name,
         c.last_name,
         c.village,
         c.contact,
+        c.parent_name || "",
       ]),
     });
     doc.save("contacts.pdf");
@@ -133,13 +143,14 @@ const ContactsTable = () => {
             <th>Last Name</th>
             <th>Village</th>
             <th>Contact</th>
+            <th>Parent Name</th>
             <th>Edit</th>
           </tr>
         </thead>
         <tbody>
           {filtered.length === 0 ? (
             <tr>
-              <td colSpan={6} style={{ textAlign: "center" }}>No contacts found.</td>
+              <td colSpan={7} style={{ textAlign: "center" }}>No contacts found.</td>
             </tr>
           ) : (
             filtered.map((c) => (
@@ -159,6 +170,7 @@ const ContactsTable = () => {
                     c.contact
                   )}
                 </td>
+                <td>{c.parent_name || ""}</td>
                 <td>
                   {editingId === c.id ? (
                     <>
@@ -177,5 +189,4 @@ const ContactsTable = () => {
     </div>
   );
 };
-
 export default ContactsTable;
